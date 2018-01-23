@@ -12,9 +12,15 @@ from . import models
 
 from . import permissions
 from rest_framework.authentication import TokenAuthentication
+#gives user a temporary toekn to insert in the header of Http request to authenticate them
 
 from rest_framework import filters
-#gives user a temporary toekn to insert in the header of Http request to authenticate them
+
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+#rest api login authentication
+from rest_framework.authtoken.views import ObtainAuthToken
+#will trick api into using above but customized
+
 
 # Create your views here.
 
@@ -145,3 +151,20 @@ class UserProfileViewSet(viewsets.ModelViewSet): #modeLviewset takes care of the
     filter_backends = (filters.SearchFilter,)
     #which field we want the user to filter by
     search_fields = ('name', 'email',)
+
+
+
+
+
+class LoginViewSet(viewsets.ViewSet):
+    """Checks email and password and returns an auth token"""
+
+    serializer_class = AuthTokenSerializer
+    #create is what is called when you make HTTP POST to the viewset
+    def create(self, request):
+        """Use the ObtainAuthToken APIView to validate and creatre a token."""
+
+        return ObtainAuthToken().post(request)
+        #obtained token, then post funxtion of the obtained token class
+
+        #now add this voeiewset to URL Router

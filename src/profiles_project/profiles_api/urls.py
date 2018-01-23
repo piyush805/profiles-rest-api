@@ -8,6 +8,7 @@ from .import views
 router = DefaultRouter()
 router.register('hello-viewset', views.HelloViewSet, base_name='hello-viewset')
 router.register('profile',views.UserProfileViewSet)
+router.register('login',views.LoginViewSet, base_name = 'login')#base_name becuz its not a model viewset
 #when registering a modelviewset, dont need a base_name,
 #django rest can figure this out
 #by looking at the model that's registered with the serailizer,
