@@ -29,6 +29,7 @@ class HelloApiView(APIView):
         #dictionary converted to JSON
         return Response({"message": 'Hello', "an_apiview": an_apiview})
 
+
     #a method to post to our API
     #request contains info about request that was made in API call, including data that was posted
     def post(seslf, request):
@@ -71,6 +72,8 @@ class HelloApiView(APIView):
 class HelloViewSet(viewsets.ViewSet):
     """Test API ViewSet """
 
+    serializer_class = serializers.HelloSerializer
+
     def list(self, request):
         """Return a hello message"""
 
@@ -81,3 +84,37 @@ class HelloViewSet(viewsets.ViewSet):
         ]
 
         return Response({'message':'Hello','a_viewset':a_viewset})
+
+
+    def create(self, request):
+        """Create a new hello message"""
+        serializer = serializers.HelloSerializer(data=request.data)
+
+        if serializer.is_valid():
+            #if valid, add the same functionality as APIView
+            name = serializer.data.get('name')
+            message = 'Hello {0}'.format(name)
+            return Response({'message': message})
+        else :
+            return Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, pk=None):
+        """Handles getting  an object by its ID"""
+        #no logic , simply response
+        return Response({'http_method': 'GET'})
+
+    def update(self, request, pk=None):
+        """Handles updating an object """
+
+        return Response({'http_method': 'PUT'})
+
+    def partial_update(self, request, pk=None):
+        """Handle updating part of an object"""
+
+        return Response({'http_method':'PATCH'})
+        #again, needs a primary key to know which object it is destroying
+    def destroy(self, request, pk=None):
+        """Handles removing an object"""
+
+        return Response({'http_method':'DELETE'})
