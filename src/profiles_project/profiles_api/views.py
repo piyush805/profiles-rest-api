@@ -9,6 +9,11 @@ from . import serializers
 
 from rest_framework import viewsets
 from . import models
+
+from . import permissions
+from rest_framework.authentication import TokenAuthentication
+#gives user a temporary toekn to insert in the header of Http request to authenticate them
+
 # Create your views here.
 
 class HelloApiView(APIView):
@@ -128,3 +133,8 @@ class UserProfileViewSet(viewsets.ModelViewSet): #modeLviewset takes care of the
     #this serailizer has model class in metadata set
     #it knows what to look for
     queryset = models.UserProfile.objects.all()
+    #adding authentication class varible
+    authentication_class = (TokenAuthentication,)
+    #tuple contains all the authentication types| object will be created as tuple hence immutable
+    permission_classes = (permissions.UpdateOwnProfile,)
+    #tuples, incase you want to add more than one authentication method
