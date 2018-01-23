@@ -44,7 +44,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     #will create later
     objects = UserProfileManager()
-    #customer 'username field' used when logging in, setting it to email
+    #customer's 'username field' used when logging in, setting it to email
     USERNAME_FIELD = 'email'
     #required firld in the system, can be as many as you want
     REQUIRED_FIELDS = ['name']

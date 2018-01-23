@@ -13,7 +13,7 @@ router.register('login',views.LoginViewSet, base_name = 'login')#base_name becuz
 #django rest can figure this out
 #by looking at the model that's registered with the serailizer,
 #that's registered on our vieswset
-
+router.register('feed',views.UserProfileFeedViewSet)
 
 urlpatterns = [
     url(r'^hello-view/', views.HelloApiView.as_view()),

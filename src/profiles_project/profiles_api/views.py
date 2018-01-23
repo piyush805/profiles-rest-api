@@ -21,7 +21,9 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 #will trick api into using above but customized
 
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
 class HelloApiView(APIView):
@@ -142,7 +144,7 @@ class UserProfileViewSet(viewsets.ModelViewSet): #modeLviewset takes care of the
     #it knows what to look for
     queryset = models.UserProfile.objects.all()
     #adding authentication class varible
-    authentication_class = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication,)
     #tuple contains all the authentication types| object will be created as tuple hence immutable
     permission_classes = (permissions.UpdateOwnProfile,)
     #tuples, incase you want to add more than one authentication method
@@ -168,3 +170,16 @@ class LoginViewSet(viewsets.ViewSet):
         #obtained token, then post funxtion of the obtained token class
 
         #now add this voeiewset to URL Router
+
+class UserProfileFeedViewSet(viewsets.ModelViewSet):
+    """Handles creating, reading and updating profile feed ones"""
+    authentication_classes = (TokenAuthentication,)
+    serializer_class = serializers.ProfileFeedItemSerializer
+    queryset = models.ProfileFeedItem.objects.all()
+    permission_classes = (permissions.PostOwnStatus, IsAuthenticated)
+    #will allow both (can only post their own, also can't edit other's under authenticated)
+
+    def perform_create(self, serializer):
+        """Sets the user preofile to the logged in user"""
+
+        serializer.save(user_profile=self.request.user)
