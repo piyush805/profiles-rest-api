@@ -12,6 +12,8 @@ from . import models
 
 from . import permissions
 from rest_framework.authentication import TokenAuthentication
+
+from rest_framework import filters
 #gives user a temporary toekn to insert in the header of Http request to authenticate them
 
 # Create your views here.
@@ -138,3 +140,8 @@ class UserProfileViewSet(viewsets.ModelViewSet): #modeLviewset takes care of the
     #tuple contains all the authentication types| object will be created as tuple hence immutable
     permission_classes = (permissions.UpdateOwnProfile,)
     #tuples, incase you want to add more than one authentication method
+
+    #indicate all the filter that you want to  have on this viewset
+    filter_backends = (filters.SearchFilter,)
+    #which field we want the user to filter by
+    search_fields = ('name', 'email',)
