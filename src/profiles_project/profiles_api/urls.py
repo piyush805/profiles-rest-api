@@ -7,7 +7,11 @@ from .import views
 
 router = DefaultRouter()
 router.register('hello-viewset', views.HelloViewSet, base_name='hello-viewset')
-
+router.register('profile',views.UserProfileViewSet)
+#when registering a modelviewset, dont need a base_name,
+#django rest can figure this out
+#by looking at the model that's registered with the serailizer,
+#that's registered on our vieswset
 
 
 urlpatterns = [
